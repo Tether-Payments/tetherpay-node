@@ -1,6 +1,17 @@
 export type Session = {
-    uuid: number;
-    userId: number;
-  };
-  
-  export type NewSession = Omit<Session, "uuid">;
+  toUUID: string;
+  referenceNumber: string;
+};
+
+export type CreateSessionRequest = {
+  toUUID: string;
+  referenceNumber: string;
+}
+
+export type CreateSessionResponse = {
+  sessionUUID: string;
+  // TODO: define this type exactly
+  expiresAt: Date | string;
+}
+
+// export type NewSession = Omit<Session, "uuid">;
