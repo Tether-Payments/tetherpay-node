@@ -1,30 +1,15 @@
-import { createSign, createVerify } from 'crypto';
+import { etc, sign } from '@noble/ed25519';
+import { sha512 } from '@noble/hashes/sha512';
+etc.sha512Sync = (...m) => sha512(etc.concatBytes(...m));
 
-export type SignedRequestParams = {
-  body: string | undefined | null;
-};
+const bytesToBase64 = (bytes: Uint8Array): string => Buffer.from(bytes).toString('base64');
+const base64ToBytes = (base64Str: string): Uint8Array => Buffer.from(base64Str, 'base64');
 
-export function generateSignature(
-  privateKey,
-  { body = '{}' }: SignedRequestParams
-) {
-  const sign = createSign('SHA256');
-
-  sign.update(Buffer.from(JSON.stringify(body)));
-
-  sign.end();
-  return sign.sign(privateKey, 'base64');
-}
-
-export function verifySignature(
-  publicKey,
-  signature,
-  { body = '{}' }: SignedRequestParams
-) {
-  const verify = createVerify('SHA256');
-
-  verify.update(Buffer.from(JSON.stringify(body)));
-
-  verify.end();
-  return verify.verify(publicKey, Buffer.from(signature, 'base64'));
+export function signWithPrivateKey(data: any | string, privateKey: string) {
+  let key = new Uint8Array(Buffer.from(privateKey, 'base64'));
+  if (key.length > 32) {
+    key = key.slice(0, 32);
+  }
+  const message = new TextEncoder().encode(typeof data !== 'string' ? JSON.stringify(data) : data);
+  return bytesToBase64(sign(message, key));
 }

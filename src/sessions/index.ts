@@ -1,7 +1,7 @@
-import { Base } from "../base";
-import { CreateSessionRequest, CreateSessionResponse, Session } from "./types";
+import { Base } from "../base.js";
+import { CreateSessionRequest, CreateSessionResponse, Session } from "./types.js";
 
-const resourceName = "sessions";
+const resourceName = "session";
 
 export class Sessions extends Base {
   
