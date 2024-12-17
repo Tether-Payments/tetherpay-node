@@ -1,15 +1,18 @@
-import { generateSignature } from "./sign";
+import { signWithPrivateKey } from "./sign.js";
 
 type Config = {
+    walletUUID: string;
     privateKey: string;
     serverUri: string;
 };
 
 export abstract class Base {
+    private walletUUID: string;
     private privateKey: string;
     private serverUri: string;
 
     constructor(config: Config) {
+        this.walletUUID = config.walletUUID;
         this.privateKey = config.privateKey;
         this.serverUri = config.serverUri;
 
@@ -24,22 +27,18 @@ export abstract class Base {
 
     protected async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
         const url = `${this.serverUri}${endpoint}`;
-        const ts = new Date().getTime();
 
         const signingParams = {
-            method: options?.method || 'GET',
-            uri: url,
-            timestamp: ts,
             body: options?.body as string,
         }
         
         const headers = {
             "Content-Type": "application/json",
-            "X-Signature": generateSignature(this.privateKey, signingParams),
-            'X-Timestamp': ts,
+            "TPG-Signature": signWithPrivateKey(signingParams.body, this.privateKey),
+		    "TPG-WalletUUID": this.walletUUID,
         };
+        
         const config = Object.assign({}, options, { headers });
-
         const response = await fetch(url, config);
 
         if (response.ok) {
