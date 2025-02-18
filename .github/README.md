@@ -1,4 +1,13 @@
-# TetherPayments NodeSDK
+# TetherPay NodeSDK
+
+<div align="center">
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/611da423f8c28e7cfb17/maintainability)](https://codeclimate.com/repos/6724edbfd7b7a10752552963/maintainability)
+[![codecov](https://codecov.io/gh/Tether-Payments/sdk-node/graph/badge.svg?token=R0BWFG45QS)](https://codecov.io/gh/Tether-Payments/sdk-node)
+[![CodeQL](https://github.com/Tether-Payments/tetherpay-node/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Tether-Payments/tetherpay-node/actions/workflows/github-code-scanning/codeql)
+
+
+</div>
 
 A node.js SDK for TPG sessions and transactions
 
