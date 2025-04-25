@@ -1,18 +1,18 @@
 import { signWithPrivateKey } from "./sign.js";
 
 type Config = {
-    walletUUID: string;
+    walletAddress: string;
     privateKey: string;
     serverUri: string;
 };
 
 export abstract class Base {
-    private walletUUID: string;
+    private walletAddress: string;
     private privateKey: string;
     private serverUri: string;
 
     constructor(config: Config) {
-        this.walletUUID = config.walletUUID;
+        this.walletAddress = config.walletAddress;
         this.privateKey = config.privateKey;
         this.serverUri = config.serverUri;
 
@@ -31,13 +31,13 @@ export abstract class Base {
         const signingParams = {
             body: options?.body as string,
         }
-        
+
         const headers = {
             "Content-Type": "application/json",
             "TPG-Signature": signWithPrivateKey(signingParams.body, this.privateKey),
-		    "TPG-WalletUUID": this.walletUUID,
+		        "TPG-WalletAddress": this.walletAddress,
         };
-        
+
         const config = Object.assign({}, options, { headers });
         const response = await fetch(url, config);
 
